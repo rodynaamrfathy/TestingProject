@@ -153,16 +153,38 @@ public class YearTest {
 
     ///////////////////////////////////////////////////
 
+// Class Year public RegularTimePeriod previous() TC-01
+    // Basic functionality Test
     @Test
     public void PreviousYearTestValid() {
-        year = new Year(2025);
-        assertEquals(2024, ((Year) year.previous()).getYear());
+        year = new Year(2024);
+        assertEquals(2023, ((Year) year.previous()).getYear());
     }
+    // Class Year public RegularTimePeriod previous() TC-02
+    // A Lower that Bound case (1899)
+    // BUG it only works within range 1900 to 9999
     @Test
-    public void PreviousYearTest1900() { //Bug Take care !!!!!!!!!!!
+    public void PreviousYearTestBounds() {
+        year = new Year(1899);
+        assertEquals(1898, ((Year) year.previous()).getYear());
+    }
+    // Class Year public RegularTimePeriod previous() TC-03
+    // A Lower than Bound case (-2000)
+    // BUG: Year accepts invalid lower-bound input (outside 1900–9999) and returns previous() as -2001
+    @Test
+    public void PreviousYearTestNegative() {
+        year = new Year(-2000);
+        assertEquals(-1999, ((Year) year.previous()).getYear());
+    }
+    // Class Year public RegularTimePeriod previous() TC-04
+    // An edge case 1900
+    // BUG it should return null not the previous year range 1900-9999
+    @Test
+    public void PreviousYearTestEdge() {
         year = new Year(1900);
         assertNull(((Year) year.previous()).getYear());
     }
+    /////////////////////////////////////////////////////////
     @Test
     public void NextYearValid() {
         year = new Year(2025);
@@ -276,7 +298,6 @@ public class YearTest {
     // Year parseYear(java.lang.String s) TC-02
     //Test with valid 4-digit year string Input
     @Test
-    //Bug Not Sure
     public void parseTest2NotParsable() {
         String test = "202a";
         assertNull(Year.parseYear(test));
@@ -284,6 +305,8 @@ public class YearTest {
 
     // Year parseYear(java.lang.String s) TC-03
     // Test with minimum valid year Input: "1900" -> Boundary
+
+
 
     // Year parseYear(java.lang.String s) TC-04
     // Test with maximum valid year Input: "9999" -> Boundary
@@ -304,10 +327,5 @@ public class YearTest {
 
     // Year parseYear(java.lang.String s) TC-09
     // Test with negative year Input: "-2023"
-
-
-
-
-
 
 }
