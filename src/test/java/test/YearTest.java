@@ -145,7 +145,7 @@ public class YearTest {
     }
 
     // Class Year public Year (Date time, TimeZone zone) TC-04
-    // Time Zone Boundary Tests
+    // Null test case
     @Test(expected = IllegalArgumentException.class)
     public void testNullDate() {
         new Year(null, TimeZone.getDefault(), Locale.getDefault());
@@ -260,12 +260,21 @@ public class YearTest {
             y1.compareTo(notAYear);
         });
     }
+
+    ///////////////////////////////////////////////////
+    // Year parseYear(java.lang.String s)
+
+    // Year parseYear(java.lang.String s) TC-01
+    //Test with valid 4-digit year string Input
     @Test
     public void parseTest() {
         String test = "2024";
         assertEquals(2024, Year.parseYear(test).getYear());
 
     }
+
+    // Year parseYear(java.lang.String s) TC-01
+    //Test with valid 4-digit year string Input
     @Test
     //Bug Not Sure
     public void parseTest2NotParsable() {
@@ -276,7 +285,7 @@ public class YearTest {
 
 
 
-    //year paraser
+    //year parse
 
     // Valid test cases
     //Test with valid 4-digit year string Input: "2023"
