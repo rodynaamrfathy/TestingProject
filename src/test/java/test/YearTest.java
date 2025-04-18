@@ -190,18 +190,37 @@ public class YearTest {
         assertNull(((Year) year.previous()).getYear());
     }
     /////////////////////////////////////////////////////////
+    // public RegularTimePeriod next()
+
+    // public RegularTimePeriod next() TC-01
+    // Basic functionality
     @Test
     public void NextYearValid() {
         year = new Year(2025);
         assertEquals(2026, ((Year) year.next()).getYear());
     }
-    ///////////////////////////////////////////////////
-
+    // public RegularTimePeriod next() TC-02
+    // Working totally fine with the bound 9999
     @Test
-    public void NextYear9999() {
+    public void NextYearBounds() {
         year = new Year(9999);
         assertNull(year.next());
     }
+    // public RegularTimePeriod next() TC-03
+    // Bug shouldn't work with year below the min bounds
+    @Test(expected = Exception.class)
+    public void NextYearMinBounds() {
+        year = new Year(1899);
+        assertEquals(1900, ((Year) year.next()).getYear());
+    }
+    // public RegularTimePeriod next() TC-04
+    // Bug shouldn't work with negative values 1900-9999 is the range
+    @Test(expected = Exception.class)
+    public void NextYearNegative() {
+        year = new Year(-2025);
+        assertEquals(-2024, ((Year) year.next()).getYear());
+    }
+
     ///////////////////////////////////////////////////
 
     @Test
