@@ -63,5 +63,35 @@ public class YearTest {
     }
 
 
+    //year paraser
+
+    // Valid test cases
+    //Test with valid 4-digit year string Input: "2023"
+
+    // Test with valid 4-digit year string with spaces Input: " 2023 "
+
+    // Test with minimum valid year Input: "1900" -> Boundary
+
+    // Test with maximum valid year Input: "9999" -> Boundary
+
+
+    //Invalid input
+
+    //Test with non-numeric string Input: "abcd"
+
+    //Test with alphanumeric string letters + numbers Input: "2023a"
+
+    // Test with empty string Input: " "
+
+    // Test with year below minimum valid Input: "1899"
+
+    // Test with year above maximum valid Input: "10000"
+
+    // Test with zero year Input: "0"
+
+    // Test with negative year Input: "-2023"
+
+
+
 
 }
