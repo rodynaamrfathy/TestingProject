@@ -273,7 +273,7 @@ public class YearTest {
 
     }
 
-    // Year parseYear(java.lang.String s) TC-01
+    // Year parseYear(java.lang.String s) TC-02
     //Test with valid 4-digit year string Input
     @Test
     //Bug Not Sure
@@ -282,36 +282,30 @@ public class YearTest {
         assertNull(Year.parseYear(test));
     }
 
-
-
-
-    //year parse
-
-    // Valid test cases
-    //Test with valid 4-digit year string Input: "2023"
-
-    // Test with valid 4-digit year string with spaces Input: " 2023 "
-
+    // Year parseYear(java.lang.String s) TC-03
     // Test with minimum valid year Input: "1900" -> Boundary
 
+    // Year parseYear(java.lang.String s) TC-04
     // Test with maximum valid year Input: "9999" -> Boundary
 
+    // Year parseYear(java.lang.String s) TC-05
+    // Test with valid 4-digit year string with spaces Input: " 2023 "
 
-    //Invalid input
-
+    // Year parseYear(java.lang.String s) TC-06
     //Test with non-numeric string Input: "abcd"
 
+
+    // Year parseYear(java.lang.String s) TC-07
     //Test with alphanumeric string letters + numbers Input: "2023a"
 
+
+    // Year parseYear(java.lang.String s) TC-08
     // Test with empty string Input: " "
 
-    // Test with year below minimum valid Input: "1899"
-
-    // Test with year above maximum valid Input: "10000"
-
-    // Test with zero year Input: "0"
-
+    // Year parseYear(java.lang.String s) TC-09
     // Test with negative year Input: "-2023"
+
+
 
 
 
