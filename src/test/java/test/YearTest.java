@@ -153,29 +153,34 @@ public class YearTest {
 
     ///////////////////////////////////////////////////
 
-// Class Year public RegularTimePeriod previous() TC-01
+    // Class Year public RegularTimePeriod previous()
+
+    // Class Year public RegularTimePeriod previous() TC-01
     // Basic functionality Test
     @Test
     public void PreviousYearTestValid() {
         year = new Year(2024);
         assertEquals(2023, ((Year) year.previous()).getYear());
     }
+
     // Class Year public RegularTimePeriod previous() TC-02
     // A Lower that Bound case (1899)
     // BUG it only works within range 1900 to 9999
-    @Test
+    @Test (expected = Exception.class)
     public void PreviousYearTestBounds() {
         year = new Year(1899);
         assertEquals(1898, ((Year) year.previous()).getYear());
     }
+
     // Class Year public RegularTimePeriod previous() TC-03
     // A Lower than Bound case (-2000)
     // BUG: Year accepts invalid lower-bound input (outside 1900–9999) and returns previous() as -2001
-    @Test
+    @Test (expected = Exception.class)
     public void PreviousYearTestNegative() {
         year = new Year(-2000);
         assertEquals(-1999, ((Year) year.previous()).getYear());
     }
+
     // Class Year public RegularTimePeriod previous() TC-04
     // An edge case 1900
     // BUG it should return null not the previous year range 1900-9999
@@ -190,11 +195,15 @@ public class YearTest {
         year = new Year(2025);
         assertEquals(2026, ((Year) year.next()).getYear());
     }
+    ///////////////////////////////////////////////////
+
     @Test
     public void NextYear9999() {
         year = new Year(9999);
         assertNull(year.next());
     }
+    ///////////////////////////////////////////////////
+
     @Test
     public void GetSerialIndexTest() {
         year = new Year(2022);
@@ -202,17 +211,25 @@ public class YearTest {
 
 
     }
+    ///////////////////////////////////////////////////
+
     @Test
     public void testToStringReturnsYearAsString() {
         Year year = new Year(2024);
         assertEquals("2024", year.toString());
     }
+
+    ///////////////////////////////////////////////////
+
     @Test
     //Bug it should return 2537 based on the calc hash code= 31*17+year
     public void HashTest() {
         Year year = new Year(2010);
         assertEquals(2537, year.hashCode());
     }
+
+    ///////////////////////////////////////////////////
+
     @Test
     public void GetFirstMilliSecondTest() {
         Year year = new Year(2021);
@@ -231,6 +248,8 @@ public class YearTest {
         long milliSecondTime = calendar.getTimeInMillis();
         assertEquals(milliSecondTime, year.getLastMillisecond(calendar));
     }
+    ///////////////////////////////////////////////////
+
     @Test
     public void EqualsTestTwoValues() {
         Year y1 = new Year(2024);
@@ -252,6 +271,9 @@ public class YearTest {
         Object Compare = "2024";
         assertFalse(y1.equals(Compare));
     }
+
+    ///////////////////////////////////////////////////
+
     @Test
     public void CompareToEqualYearsTest() {
         Year y1 = new Year(2024);
@@ -296,7 +318,7 @@ public class YearTest {
     }
 
     // Year parseYear(java.lang.String s) TC-02
-    //Test with valid 4-digit year string Input
+    // Test with alphanumeric string letters + numbers Input:  202a
     @Test
     public void parseTest2NotParsable() {
         String test = "202a";
@@ -304,28 +326,10 @@ public class YearTest {
     }
 
     // Year parseYear(java.lang.String s) TC-03
-    // Test with minimum valid year Input: "1900" -> Boundary
-
-
-
-    // Year parseYear(java.lang.String s) TC-04
-    // Test with maximum valid year Input: "9999" -> Boundary
-
-    // Year parseYear(java.lang.String s) TC-05
     // Test with valid 4-digit year string with spaces Input: " 2023 "
-
-    // Year parseYear(java.lang.String s) TC-06
-    //Test with non-numeric string Input: "abcd"
-
-
-    // Year parseYear(java.lang.String s) TC-07
-    //Test with alphanumeric string letters + numbers Input: "2023a"
-
-
-    // Year parseYear(java.lang.String s) TC-08
-    // Test with empty string Input: " "
-
-    // Year parseYear(java.lang.String s) TC-09
-    // Test with negative year Input: "-2023"
-
+    @Test
+    public void parseTest3Parsable() {
+        String test = " 2023";
+        assertEquals(2023, Year.parseYear(test).getYear());
+    }
 }
