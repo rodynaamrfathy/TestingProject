@@ -223,32 +223,117 @@ public class YearTest {
 
     ///////////////////////////////////////////////////
 
+    // Class Year public long getSerialIndex() TC-01
+    // Basic functionality
     @Test
     public void GetSerialIndexTest() {
         year = new Year(2022);
         assertEquals(2022L, year.getSerialIndex());
-
-
     }
-    ///////////////////////////////////////////////////
+    // Class Year public long getSerialIndex() TC-02
+    // Bug shouldn't work with year below the min boundary
+    @Test(expected = Exception.class)
+    public void GetSerialIndexTestMinBounds() {
+        year = new Year(1899);
+        assertEquals(1899L, year.getSerialIndex());
+    }
+    // Class Year public long getSerialIndex() TC-03
+    // works well throws an exception
+    @Test
+    public void GetSerialIndexTestMaxBounds() {
+        year = new Year(9999);
+        assertEquals(9999L, year.getSerialIndex());
+    }
+    // Class Year public long getSerialIndex() TC-04
+    // works well throws an exception because it shouldnt work with neg values
+    @Test(expected = Exception.class)
+    public void GetSerialIndexTestNegative() {
+        year = new Year(-2000);
+        assertEquals(-2000L, year.getSerialIndex());
+    }
+    // Class Year public long getSerialIndex() TC-05
+    // Just above the lower bound (should work fine)
+    @Test
+    public void GetSerialIndexTestLowerEdge() {
+        year = new Year(1900);
+        assertEquals(1900L, year.getSerialIndex());
+    }
+    // Class Year public long getSerialIndex() TC-06
+    // Just below the upper bound (should work fine)
+    @Test
+    public void GetSerialIndexTestUpperEdge() {
+        year = new Year(9998);
+        assertEquals(9998L, year.getSerialIndex());
+    }
 
+    ///////////////////////////////////////////////////
+    //toString()
+
+    // toString() TC-01
+    // basic
     @Test
     public void testToStringReturnsYearAsString() {
         Year year = new Year(2024);
         assertEquals("2024", year.toString());
     }
 
-    ///////////////////////////////////////////////////
-
+    // toString() TC-02
+    // Negative Year String Representation
     @Test
-    //Bug it should return 2537 based on the calc hash code= 31*17+year
-    public void HashTest() {
-        Year year = new Year(2010);
-        assertEquals(2537, year.hashCode());
+    public void testToString_NegativeYear() {
+        Year year = new Year(-1000);
+        assertEquals("-1000", year.toString());
+    }
+
+    // toString() TC-03
+    // Minimum Year String Representation
+    @Test
+    public void testToString_MinimumYear() {
+        Year year = new Year(1900);
+        assertEquals(String.valueOf(1900), year.toString());
+    }
+
+    // toString() TC-04
+    // maximum Year String Representation
+    @Test
+    public void testToString_MaximumYear() {
+        Year year = new Year(9999);
+        assertEquals(String.valueOf(9999), year.toString());
+    }
+
+    // toString() TC-05
+    // Zero Year String Representation
+    @Test
+    public void testToString_ZeroYear() {
+        Year year = new Year(0);
+        assertEquals("0", year.toString());
+    }
+
+    // toString() TC-06
+    //Single Digit Year String Representation
+    @Test
+    public void testToString_SingleDigitYear() {
+        Year year = new Year(5);
+        assertEquals("5", year.toString());
     }
 
     ///////////////////////////////////////////////////
+    // Class Year public int hashCode()
 
+    // Class Year public int hashCode() TC-01
+    // Bug it produce the wrong hash value of a year
+    // the hash value is calculated by 31*17+year
+    @Test
+    public void HashTest() {
+        Year year = new Year(2024);
+        assertEquals(2551, year.hashCode());
+    }
+
+    ///////////////////////////////////////////////////////
+    /// getFirstMillisecond
+
+    // Class Year public long getFirstMillisecond(java.util.Calendar calendar) TC-01
+    // Basic Functionality
     @Test
     public void GetFirstMilliSecondTest() {
         Year year = new Year(2021);
@@ -258,32 +343,191 @@ public class YearTest {
         long milliSecondTime = calendar.getTimeInMillis();
         assertEquals(milliSecondTime, year.getFirstMillisecond(calendar));
     }
+
+    // Class Year public long getFirstMillisecond(Calendar calendar) TC-02
+    // Tests min boundary of supported years (1900)
     @Test
-    public void GetLastMilliSecondTest() {
+    public void GetFirstMillisecond_LowerBoundary() {
+        Year year = new Year(1900);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1900, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getFirstMillisecond(calendar));
+    }
+
+    // Class Year public long getFirstMillisecond(Calendar calendar) TC-03
+    // Tests Max boundary of supported years (9999)
+    @Test
+    public void GetFirstMillisecond_UpperBoundary() {
+        Year year = new Year(9999);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(9999, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getFirstMillisecond(calendar));
+    }
+
+    // Class Year public long getFirstMillisecond(Calendar calendar) TC-04
+    // BUG: Invalid year (-2025) should not be accepted
+    @Test (expected = Exception.class)
+    public void GetFirstMillisecond_InvalidYear() {
+        Year year = new Year(-2025);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(-2025, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        year.getFirstMillisecond(calendar);
+    }
+
+    // Class Year public long getFirstMillisecond(Calendar calendar) TC-05
+    // BUG: Invalid year 10000 should not be accepted
+    @Test (expected = Exception.class)
+    public void GetFirstMillisecond_OutofBoundary() {
+        Year year = new Year(10000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(10000, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        year.getFirstMillisecond(calendar);
+    }
+
+    // Class Year public long getFirstMillisecond(Calendar calendar) TC-06
+    // Tests with calendar in UTC timezone
+    @Test
+    public void GetFirstMillisecond_UTCTimezone() {
+        Year year = new Year(2021);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.set(2021, Calendar.JANUARY, 1, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getFirstMillisecond(calendar));
+    }
+    ////////////////////////////////////////////////////////////////////////
+    /// getLastMillisecond
+
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-01
+    // Basic Functionality (2021)
+    @Test
+    public void GetLastMillisecondTest_Basic() {
         Year year = new Year(2021);
         Calendar calendar = Calendar.getInstance();
         calendar.set(2021, Calendar.DECEMBER, 31, 23, 59, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        long milliSecondTime = calendar.getTimeInMillis();
-        assertEquals(milliSecondTime, year.getLastMillisecond(calendar));
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getLastMillisecond(calendar));
     }
-    ///////////////////////////////////////////////////
 
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-02
+    // Min bound of valid range
+    @Test
+    public void GetLastMillisecondTest_LowerBound() {
+        Year year = new Year(1900);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1900, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getLastMillisecond(calendar));
+    }
+
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-03
+    // Max bound of valid range
+    @Test
+    public void GetLastMillisecondTest_UpperBound() {
+        Year year = new Year(9999);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(9999, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getLastMillisecond(calendar));
+    }
+
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-04
+    // BUG: Year below 1900 should not be accepted
+    @Test (expected = Exception.class)
+    public void GetLastMillisecondTest_InvalidYear() {
+        Year year = new Year(-2025);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(-2025, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long result = year.getLastMillisecond(calendar);
+        System.out.println("BUG: Returned value for invalid year = " + result);
+        assertTrue("BUG: Invalid year should not be allowed", result > 0); // force fail
+    }
+
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-05
+    // BUG: Year above 10000 should not be accepted
+    @Test (expected = Exception.class)
+    public void GetLastMillisecondTest_exceddBounds() {
+        Year year = new Year(10000);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(10000, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long result = year.getLastMillisecond(calendar);
+        System.out.println("BUG: Returned value for invalid year = " + result);
+        assertTrue("BUG: Invalid year should not be allowed", result > 0); // force fail
+    }
+
+    // Class Year public long getLastMillisecond(Calendar calendar) TC-06
+    // Checks result using UTC timezone calendar
+    @Test
+    public void GetLastMillisecondTest_UTC() {
+        Year year = new Year(2022);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.set(2022, Calendar.DECEMBER, 31, 23, 59, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        long expected = calendar.getTimeInMillis();
+        assertEquals(expected, year.getLastMillisecond(calendar));
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    /// equals
+
+
+    // Class Year public boolean equals(java.lang.Object object) TC-01
+    // Basic functionality
     @Test
     public void EqualsTestTwoValues() {
         Year y1 = new Year(2024);
         Year y2 = new Year(2024);
         assertTrue(y1.equals(y2));
-
-
     }
+    // Class Year public boolean equals(java.lang.Object object) TC-02
+    // Bug the value 1899 shouldn't be accepted
+    @Test (expected = Exception.class)
+    public void EqualsTestTwoValuesInvalidLowerBoundary() {
+        Year y1 = new Year(1899);
+        Year y2 = new Year(1899);
+        assertTrue(y1.equals(y2));
+    }
+    // Class Year public boolean equals(java.lang.Object object) TC-03
+    // Works well with the upper boundary
+    @Test (expected = Exception.class)
+    public void EqualsTestTwoValuesInvalidUpperBoundary() {
+        Year y1 = new Year(10000);
+        Year y2 = new Year(10000);
+        assertTrue(y1.equals(y2));
+    }
+    // Class Year public boolean equals(java.lang.Object object) TC-04
+    // basic Functionality
     @Test
     public void EqualsTestoneValue() {
-        Year y1 = new Year(2024);
+        Year y1 = new Year(2023);
         assertTrue(y1.equals(y1));
-
-
     }
+    // Class Year public boolean equals(java.lang.Object object) TC-05
+    // Bug the value 1899 shouldn't be accepted
+    @Test (expected = Exception.class)
+    public void EqualsTestoneValueInvalidLowerBoundary() {
+        Year y1 = new Year(1899);
+        assertTrue(y1.equals(y1));
+    }
+    // Class Year public boolean equals(java.lang.Object object) TC-06
+    // works well with the upper boundary
+    @Test (expected = Exception.class)
+    public void EqualsTestoneValueInvalidUpperBoundary() {
+        Year y1 = new Year(10000);
+        assertTrue(y1.equals(y1));
+    }
+    // Class Year public boolean equals(java.lang.Object object) TC-07
     @Test
     public void testEquals_DifferentClass() {
         Year y1 = new Year(2024);
@@ -292,7 +536,10 @@ public class YearTest {
     }
 
     ///////////////////////////////////////////////////
+    /// compareTo
 
+    // compareTo(java.lang.Object o1) TC-01
+    // zero == same,
     @Test
     public void CompareToEqualYearsTest() {
         Year y1 = new Year(2024);
@@ -300,6 +547,8 @@ public class YearTest {
         assertEquals(0, y1.compareTo(y2));
     }
 
+    // compareTo(java.lang.Object o1) TC-02
+    // negative == before
     @Test
     public void CompareToBeforeTest() {
         Year y1 = new Year(2023);
@@ -307,21 +556,49 @@ public class YearTest {
         assertTrue(y1.compareTo(y2) < 0);
     }
 
+    // compareTo(java.lang.Object o1) TC-03
+    // positive == after
     @Test
     public void CompareToAfterTest() {
         Year y1 = new Year(2025);
         Year y2 = new Year(2024);
         assertTrue(y1.compareTo(y2) > 0);
     }
-    @Test
+
+    // compareTo(java.lang.Object o1) TC-04
+    // Invalid Type Comparison Test
+    @Test (expected = Exception.class)
     //Bug should throw an exception but nth was thrown
     public void CompareToDifferentClassTest() {
         Year y1 = new Year(2024);
         Object notAYear = "2024";
+        y1.compareTo(notAYear);
+    }
 
-        assertThrows(ClassCastException.class, () -> {
-            y1.compareTo(notAYear);
-        });
+    // compareTo(java.lang.Object o1) TC-05
+    // Edge Case Comparisons
+    @Test
+    public void testCompareTo_MinimumYear() {
+        Year minYear = new Year(1900);
+        Year year2023 = new Year(2023);
+        assertTrue(minYear.compareTo(year2023) < 0);
+    }
+
+    // compareTo(java.lang.Object o1) TC-06
+    // Edge Case Comparisons
+    @Test
+    public void testCompareTo_MaximumYear() {
+        Year maxYear = new Year(9999);
+        Year year2023 = new Year(2023);
+        assertTrue(maxYear.compareTo(year2023) > 0);
+    }
+
+    // compareTo(java.lang.Object o1) TC-07
+    // Null Comparison Test
+    @Test (expected = NullPointerException.class)
+    public void testCompareTo_Null() {
+        Year year2023 = new Year(2023);
+        year2023.compareTo(null);
     }
 
     ///////////////////////////////////////////////////
