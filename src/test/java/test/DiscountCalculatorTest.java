@@ -19,6 +19,8 @@ public class DiscountCalculatorTest {
         calendar = Calendar.getInstance();
     }
 
+    // isTheSpecialWeek
+    // TC-01
     @Test
     public void testIsTheSpecialWeekWhenFalse() throws Exception {
         // Arrange
@@ -31,6 +33,7 @@ public class DiscountCalculatorTest {
         assertFalse(discountCalculator.isTheSpecialWeek());
     }
 
+    // TC-02
     // Test missing cases ( JUNE, 23 is a date in week 26 )
     @Test
     public void testIsTheSpecialWeekWhenTrue() throws Exception {
@@ -44,6 +47,8 @@ public class DiscountCalculatorTest {
         assertTrue(discountCalculator.isTheSpecialWeek());
     }
 
+    // getDiscountPercentage
+    // TC-01
     @Test
     public void getDiscountPercentage_Week15() throws Exception {
         // Arrange
@@ -54,6 +59,7 @@ public class DiscountCalculatorTest {
         assertEquals(5,discountCalculator.getDiscountPercentage());
     }
 
+    // TC-02
     @Test
     public void getDiscountPercentage_Week10() throws Exception {
         // Arrange
@@ -64,6 +70,7 @@ public class DiscountCalculatorTest {
         assertEquals(7,discountCalculator.getDiscountPercentage());
     }
 
+    // TC-03
     // BOUNDARY
     @Test
     public void getDiscountPercentage_FirstWeek() {
@@ -75,6 +82,7 @@ public class DiscountCalculatorTest {
         assertEquals(5, calculator.getDiscountPercentage());
     }
 
+    // TC-04
     // BOUNDARY
     @Test
     public void getDiscountPercentage_LastWeek52() {
@@ -86,6 +94,7 @@ public class DiscountCalculatorTest {
         assertEquals(7, calculator.getDiscountPercentage());
     }
 
+    // TC-05
     // Additional test for 53-week year if needed BOUNDARY
     @Test
     public void getDiscountPercentage_Week53() {
@@ -93,6 +102,28 @@ public class DiscountCalculatorTest {
         Week week53 = new Week(53, 2020); // 2020 had 53 weeks
         // Act
         DiscountCalculator calculator = new DiscountCalculator(week53);
+        // Assert
+        assertEquals(5, calculator.getDiscountPercentage());
+    }
+
+    // TC-06
+    // Additional test for negative week
+    @Test (expected = IllegalArgumentException.class)
+    public void getDiscountPercentage_WeekNeg50() {
+        // Arrange
+        Week week53 = new Week(-50, 2020); // 2020 had 53 weeks
+        // Act
+        DiscountCalculator calculator = new DiscountCalculator(week53);
+        // Assert
+        assertEquals(5, calculator.getDiscountPercentage());
+    }
+
+    // TC-06
+    // Additional test for negative week
+    @Test (expected = IllegalArgumentException.class)
+    public void getDiscountPercentage_WeekNull() {
+        // Act
+        DiscountCalculator calculator = new DiscountCalculator((Week) null);
         // Assert
         assertEquals(5, calculator.getDiscountPercentage());
     }

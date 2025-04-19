@@ -1,7 +1,6 @@
 package test;
 
 import org.jfree.data.time.Year;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -73,7 +72,7 @@ public class YearTest {
     // Class Year public Year (Date time) TC-01
     // Basic Date Conversion (e.g., 1/1/2021)
     @Test
-    public void testYearWithTimeDateBasic() throws Exception {
+    public void testYearWithTimeDateBasic()  {
         calendar = Calendar.getInstance();
         calendar.set(2005, Calendar.JANUARY, 7);
         time = calendar.getTime();
@@ -85,7 +84,7 @@ public class YearTest {
     // Edge Cases
     // January 1 boundary
     @Test
-    public void testYearWithTimeBoundariesBeginning() throws Exception {
+    public void testYearWithTimeBoundariesBeginning() {
         calendar = Calendar.getInstance();
         calendar.set(2025, Calendar.JANUARY, 1, 0, 0, 0);
         year = new Year(calendar.getTime());
@@ -96,7 +95,7 @@ public class YearTest {
     // Edge Cases
     // December 31 boundary
     @Test
-    public void testYearWithTimeBoundariesEnd() throws Exception {
+    public void testYearWithTimeBoundariesEnd()  {
         calendar = Calendar.getInstance();
         calendar.set(2025, Calendar.DECEMBER, 31, 23, 59, 59);
         year = new Year(calendar.getTime());
@@ -109,7 +108,7 @@ public class YearTest {
     // Class Year public Year (Date time, TimeZone zone) TC-01
     // Basic Functionality Test
     @Test
-    public void InstantYearTimeZone() throws Exception {
+    public void InstantYearTimeZone()  {
         calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.set(2021, Calendar.DECEMBER, 31,21,0,0 );
         time = calendar.getTime();
@@ -121,7 +120,7 @@ public class YearTest {
     // Class Year public Year (Date time, TimeZone zone) TC-02
     // Time Zone Boundary Tests New York (UTC-5)
     @Test
-    public void InstantYearTimeZoneBoundaryNeg5() throws Exception {
+    public void InstantYearTimeZoneBoundaryNeg5()  {
         calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
         time = calendar.getTime();
@@ -134,7 +133,7 @@ public class YearTest {
     // Class Year public Year (Date time, TimeZone zone) TC-03
     // Time Zone Boundary Tests
     @Test
-    public void InstantYearTimeZoneBoundaryPlus9() throws Exception {
+    public void InstantYearTimeZoneBoundaryPlus9() {
         calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.set(2024, Calendar.DECEMBER, 31, 23, 59, 59);
         time = calendar.getTime();
@@ -175,11 +174,11 @@ public class YearTest {
     // Class Year public RegularTimePeriod previous() TC-03
     // A Lower than Bound case (-2000)
     // BUG: Year accepts invalid lower-bound input (outside 1900–9999) and returns previous() as -2001
-    @Test (expected = Exception.class)
+    @Test(expected = Exception.class)
     public void PreviousYearTestNegative() {
-        year = new Year(-2000);
-        assertEquals(-1999, ((Year) year.previous()).getYear());
+        year = new Year(-2000); // this line should throw an exception
     }
+
 
     // Class Year public RegularTimePeriod previous() TC-04
     // An edge case 1900
@@ -245,7 +244,7 @@ public class YearTest {
         assertEquals(9999L, year.getSerialIndex());
     }
     // Class Year public long getSerialIndex() TC-04
-    // works well throws an exception because it shouldnt work with neg values
+    // works well throws an exception because it shouldn't work with neg values
     @Test(expected = Exception.class)
     public void GetSerialIndexTestNegative() {
         year = new Year(-2000);
@@ -382,7 +381,7 @@ public class YearTest {
     // Class Year public long getFirstMillisecond(Calendar calendar) TC-05
     // BUG: Invalid year 10000 should not be accepted
     @Test (expected = Exception.class)
-    public void GetFirstMillisecond_OutofBoundary() {
+    public void GetFirstMillisecond_OutOfBoundary() {
         Year year = new Year(10000);
         Calendar calendar = Calendar.getInstance();
         calendar.set(10000, Calendar.JANUARY, 1, 0, 0, 0);
@@ -456,7 +455,7 @@ public class YearTest {
     // Class Year public long getLastMillisecond(Calendar calendar) TC-05
     // BUG: Year above 10000 should not be accepted
     @Test (expected = Exception.class)
-    public void GetLastMillisecondTest_exceddBounds() {
+    public void GetLastMillisecondTest_ExBounds() {
         Year year = new Year(10000);
         Calendar calendar = Calendar.getInstance();
         calendar.set(10000, Calendar.DECEMBER, 31, 23, 59, 59);
@@ -509,21 +508,21 @@ public class YearTest {
     // Class Year public boolean equals(java.lang.Object object) TC-04
     // basic Functionality
     @Test
-    public void EqualsTestoneValue() {
+    public void EqualsTestOneValue() {
         Year y1 = new Year(2023);
         assertTrue(y1.equals(y1));
     }
     // Class Year public boolean equals(java.lang.Object object) TC-05
     // Bug the value 1899 shouldn't be accepted
     @Test (expected = Exception.class)
-    public void EqualsTestoneValueInvalidLowerBoundary() {
+    public void EqualsTestOneValueInvalidLowerBoundary() {
         Year y1 = new Year(1899);
         assertTrue(y1.equals(y1));
     }
     // Class Year public boolean equals(java.lang.Object object) TC-06
     // works well with the upper boundary
     @Test (expected = Exception.class)
-    public void EqualsTestoneValueInvalidUpperBoundary() {
+    public void EqualsTestOneValueInvalidUpperBoundary() {
         Year y1 = new Year(10000);
         assertTrue(y1.equals(y1));
     }

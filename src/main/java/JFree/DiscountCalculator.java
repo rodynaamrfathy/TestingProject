@@ -26,7 +26,6 @@ public class DiscountCalculator implements IDiscountCalculator {
     public int getDiscountPercentage()
     {
         int weekNumber = currentWeek.getWeek();
-        // should return 1-0.07, 1-0.05
         return weekNumber % 2 == 0 ? 7 : 5;
     }
 }
